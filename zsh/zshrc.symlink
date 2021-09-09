@@ -4,8 +4,9 @@
 export DOTFILES_ROOT=$HOME/.dotfiles
 export PRIVATE_DOTFILES_ROOT=$HOME/.private_dotfiles
 
-# your project folder that we can `c [tab]` to
-export PROJECTS=("$HOME/dev" "$HOME/localdev")
+# your project folders that we can `c [tab]` to
+export PROJECTS="$HOME"/dev
+export PERSONAL_PROJECTS="$HOME"/localdev
 
 # Stash your environment variables in ~/.localrc. This means they'll stay out
 # of your main dotfiles repository (which may be public, like this one), but

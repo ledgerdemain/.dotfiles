@@ -13,4 +13,4 @@
 #
 # ...to quickly jump into holman/boom, for example.
 
-cd "$PROJECTS/$1"
+CDPATH="$PROJECTS:$PERSONAL_PROJECTS:$CDPATH" cd "$1"
