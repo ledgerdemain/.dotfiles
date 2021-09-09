@@ -24,8 +24,3 @@ if ! [[ -e "$HOME"/.oh-my-zsh ]]; then
     export ZSH_THEME="robbyrussell"
     source "$ZSH"/oh-my-zsh.sh
 fi
-
-if ! $(brew list | grep -q "direnv"); then
-    echo "Installing direnv"
-    brew install direnv
-fi
