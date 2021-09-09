@@ -2,8 +2,8 @@
 [include]
         path = ~/.gitconfig.local
 [alias]
-        wtf     = !$ZSH/bin/git-wtf
-        rank-contributors = !$ZSH/bin/git-rank-contributors
+        wtf     = !$DOTFILES_ROOT/bin/git-wtf
+        rank-contributors = !$DOTFILES_ROOT/bin/git-rank-contributors
 [color]
         diff = auto
         status = auto
