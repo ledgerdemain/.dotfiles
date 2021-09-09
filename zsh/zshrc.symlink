@@ -30,7 +30,7 @@ for file in ${${config_files:#*/path.zsh}:#*/completion.zsh}; do
 done
 
 # initialize autocomplete here, otherwise functions won't be loaded
-autoload -U compinit
+autoload -Uz compinit
 compinit
 
 # load every completion after autocomplete loads
