@@ -1,0 +1,4 @@
+# set to use slim images by default for some of the common runner types in github workflows
+-P ubuntu-latest=node:12-buster-slim
+-P ubuntu-20.04=node:12-buster-slim
+-P ubuntu-18.04=node:12-buster-slim
