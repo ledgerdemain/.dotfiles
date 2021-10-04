@@ -1,8 +1,15 @@
 #!/bin/bash
 #
 # if not previously installed this script will install
+# - act (utility for testing github actions workflows locally https://github.com/nektos/act)
 # - direnv
 # - google cloud sdk (gcloud gsutil bq)
+
+
+if ! $(brew list | grep -q "act"); then
+    echo "Installing act"
+    brew install act
+fi
 
 
 if ! $(brew list | grep -q "direnv"); then
