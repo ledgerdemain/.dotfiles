@@ -1,8 +1,11 @@
 #!/bin/bash
 #
 # pyenv
+# pipx
+# pipenv
 #
-# This installs pyenv and some of the most popular python versions.
+# installs pyenv and some of the most popular python versions
+# installs pipx and pipenv
 
 # Check for pyenv
 if test ! "$(which pyenv)"; then
@@ -23,5 +26,29 @@ if test ! "$(which pyenv)"; then
         echo "brew is not installed - skipping installation of pyenv"
     fi
 fi
+
+
+# Check for pipx
+if test ! "$(which pipx)"; then
+    if test "$(which brew)"; then
+        echo "Installing pipx for you."
+        brew install pipx
+        pipx ensurepath
+    else
+        echo "brew is not installed - skipping installation of pipx"
+    fi
+fi
+
+
+# Check for pipenv
+if test ! "$(which pipenv)"; then
+    if test "$(which pipx)"; then
+        echo "Installing pipenv for you."
+        pipx install pipenv
+    else
+        echo "pipx is not installed - skipping installation of pipenv"
+    fi
+fi
+
 
 exit 0
