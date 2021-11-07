@@ -2,7 +2,7 @@
 ZSH_THEME="robbyrussell"
 plugins=(
     git
-    osx
+    macos
     zsh-syntax-highlighting
     zsh-autosuggestions
     docker
