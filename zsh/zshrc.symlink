@@ -51,7 +51,10 @@ fi
 # symlink shell script commands from bin dirs to /usr/local/bin
 for file in ${custom_shell_cmds}; do
   file_name=${file##*/}
-  ln -s "$file" /usr/local/bin/"$file_name"
+  symlink=/usr/local/bin/"$file_name"
+  if [[ ! -h "$symlink" ]]; then
+    ln -s "$file" "$symlink"
+  fi
 done
 
 unset custom_shell_cmds
