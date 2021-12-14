@@ -40,6 +40,26 @@ done
 
 unset config_files
 
+
+# all of our custom shell commands
+typeset -U custom_shell_cmds
+custom_shell_cmds=("$DOTFILES_ROOT"/bin/*)
+if [[ -d  "$PRIVATE_DOTFILES_ROOT"/bin ]]; then
+  custom_shell_cmds+=("$PRIVATE_DOTFILES_ROOT"/bin/*)
+fi
+
+# symlink shell script commands from bin dirs to /usr/local/bin
+for file in ${custom_shell_cmds}; do
+  file_name=${file##*/}
+  symlink=/usr/local/bin/"$file_name"
+  if [[ ! -h "$symlink" ]]; then
+    ln -s "$file" "$symlink"
+  fi
+done
+
+unset custom_shell_cmds
+
+
 # Better history
 # Credits to https://coderwall.com/p/jpj_6q/zsh-better-history-searching-with-arrow-keys
 autoload -U up-line-or-beginning-search
