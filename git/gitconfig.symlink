@@ -2,6 +2,7 @@
 [include]
         path = ~/.gitconfig.local
 [alias]
+        conventional-commit = !$DOTFILES_ROOT/bin/git-conventional-commit
         wtf     = !$DOTFILES_ROOT/bin/git-wtf
         rank-contributors = !$DOTFILES_ROOT/bin/git-rank-contributors
 [color]
@@ -26,3 +27,5 @@
         default = simple
 [credential]
 	helper = osxkeychain
+[init]
+	defaultBranch = main
