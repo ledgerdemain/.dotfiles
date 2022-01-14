@@ -1,0 +1,77 @@
+#!/bin/zsh
+
+
+usage() {
+    echo "Usage:
+    $1 COMMIT_TYPE COMMIT_SCOPE COMMIT_MESSAGE
+
+    Arguments:
+        COMMIT_TYPE (required): should be selected from one of the following options,
+            build     -- changes that affect the build system or external dependencies (example scopes - gulp, broccoli, npm)
+            chore     -- manual updates that do not affect the user, no production code change (e.g. updating the .gitignore configuration file)
+            ci        -- changes to our CI configuration files and scripts (example scopes - Travis, Circle, BrowserStack, SauceLabs)
+            docs      -- documentation only changes
+            feat      -- a commit of the type feat introduces a new feature to the codebase (this correlates with MINOR in Semantic Versioning)
+            fix       -- a commit of the type fix patches a bug in your codebase (this correlates with PATCH in Semantic Versioning)
+            perf      -- a code change that improves performance
+            refactor  -- a code change that neither fixes a bug nor adds a feature
+            revert    -- for reverting a specific commit (the commit body should contain the hash you are reverting)
+            style     -- changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
+            test      -- adding missing tests or correcting existing tests
+
+        COMMIT_SCOPE (optional):
+            The commit scope suggestions are generated from the current repo's top-level directories. You can set it to
+            one of those options or to something else entirely.
+
+        COMMIT_MESSAGE (required):
+            The message to be used in the git commit. Note that the commit message should be written in the imperative.
+            For example 'remove whitespaces and extra lines' would be good as opposed to 'removed' or 'removes' which
+            would have been bad.
+    "
+    exit 1
+}
+
+
+breaking_change=
+commit_body=
+
+case "$#" in
+0)
+	usage $0 ;;
+1)
+    usage $0 ;;
+2)  
+    commit_type="$1"
+    commit_message="$2"
+    commit_body="$commit_type: $commit_message"
+    ;;
+3|4)
+    # while [[ "$#" -gt 0 ]]; do
+    #     case $1 in
+
+    #     -b|--breaking-change) breaking_change="$1"
+    #         shift
+    #         shift;;
+
+    #     -b|--branch) _branch="$2"
+    #         shift
+    #         shift;;
+
+    #     -ch|--slack-channel) _slack_channel="$2"
+    #         shift
+    #         shift;;
+
+    #     *)    # unknown option.
+    #         shift;;
+    #     esac
+    # done
+    commit_type="$1"
+    commit_scope="$2"
+    commit_message="$3"
+    commit_body="$commit_type($commit_scope): $commit_message"
+    ;;
+*)
+    usage $0 ;;
+esac
+
+echo "would have executed 'git commit -m \"$commit_body\"'"
