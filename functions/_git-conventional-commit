@@ -1,0 +1,162 @@
+#compdef git-conventional-commit
+#description create a commit adhering to the conventional commit specification
+
+
+# (( $+functions[_git-conventional-commit] )) ||
+_cd_to_toplevel () {
+	cdup=$(git rev-parse --show-toplevel) &&
+	cd "$cdup" || {
+		gettext "Cannot chdir to \$cdup, the toplevel of the working tree" >&2
+		exit 1
+	}
+}
+
+
+# (( $+functions[_git-conventional-commit] )) ||
+_suggest_toplevel_dirs_as_scopes () {
+    _cd_to_toplevel
+    # suggestions=$(ls -d */ | sed 's#/$##')
+    # echo $suggestions
+    ls -d */ | sed 's#/$##'
+}
+
+
+# _handle_commit_message () {
+#     local curcontext=$curcontext state line ret=1
+#     declare -A opt_args
+#     default_msg="your commit message here"
+
+#     _arguments -C \
+#         {1,'*'}1:commit message:->commit_message && return
+#     # '2:commit scope:->commit_scopes' \
+#     # '*:: :->args' && return
+# }
+
+
+# (( $+functions[_git-conventional-commit] )) ||
+_git-conventional-commit () {
+    local curcontext=$curcontext state line ret=1
+    declare -A opt_args
+
+    _arguments -C \
+    {-h,--help}'[Print the command usage help message]' \
+    {-b,--breaking-change}'[Mark the commit as a breaking change]' \
+    '1:commit type:->commit_types' \
+    "::commit scope:($(_suggest_toplevel_dirs_as_scopes))" \
+    ':commit message:->commit_message' \
+    && return
+    # "-b[Mark the commit as a breaking change]" \
+    # "--breaking-change[Mark the commit as a breaking change]" \
+    # '*:: :->args' && return
+    # '2:commit scope:->commit_scopes' \
+    # '*:: :->args' && return
+
+    case "$state" in
+        (commit_types)
+            declare -a _commit_types
+            _commit_types=(
+                'build:changes that affect the build system or external dependencies (example scopes - gulp, broccoli, npm)'
+                'chore:manual updates that do not affect the user, no production code change (e.g. updating the .gitignore configuration file)'
+                'ci:changes to our CI configuration files and scripts (example scopes - Travis, Circle, BrowserStack, SauceLabs)'
+                'docs:documentation only changes'
+                'feat:a commit of the type feat introduces a new feature to the codebase (this correlates with MINOR in Semantic Versioning)'
+                'fix:a commit of the type fix patches a bug in your codebase (this correlates with PATCH in Semantic Versioning)'
+                'perf:a code change that improves performance'
+                'refactor:a code change that neither fixes a bug nor adds a feature'
+                'revert:for reverting a specific commit (the commit body should contain the hash you are reverting)'
+                'style:changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)'
+                'test:adding missing tests or correcting existing tests'
+            )
+
+            _describe -t _commit_types 'commit types' _commit_types && ret=0
+        ;;
+        # (breaking_change)
+        #     _arguments \
+        #        {-b,--breaking-change}'[Mark the commit as a breaking change]' && ret=0
+        # ;;
+        # (commit_scopes)
+        #     # curcontext=${curcontext%:*}-$line[1]:
+        #     declare -a _commit_scopes
+        #     _commit_scopes=($(_suggest_toplevel_dirs_as_scopes))
+        #     # _describe -t _commit_scopes 'commit scope' _commit_scopes && ret=0
+        #     _arguments "::commit scope:(${_commit_scopes[@]})"
+        # ;;
+        (commit_message)
+            # compadd -X 'your commit message' -P '"' -S '"'  && ret=0
+            _message 'your commit message goes here' && ret=0
+        ;;
+        # (args)
+        #     # case $line[2] in
+        #     #   (controller)
+        #     #     _arguments \
+        #     #       '-d:remove all generated files' \
+        #     #       '-n:specify the application' \
+        #     #       '-r:specify the root'
+        #     #       ret=0
+        #     #   ;;
+        #     #   (mailer)
+        #     #     local mailers; mailers=(
+        #     #       '-a:creates a mailer for the specified subapp'
+        #     #       '-d:removes all generated files'
+        #     #       '-n:specify the application'
+        #     #       '-r:specify the root destination path'
+        #     #     )
+        #     #     _describe -t mailers 'mailer' mailers && ret=0
+        #     #   ;;
+        #     # esac
+
+        #     # _describe 'commit-message:your commit message:MESSAGE' && ret=0
+        #     _arguments -s \
+        #        {-b,--breaking-change}'[Mark the commit as a breaking change]' && ret=0
+        # ;;
+    esac
+
+    return $ret
+}
+
+
+_git-conventional-commit
+
+
+# _arguments '-t[commit type]' '1:first arg:_net_interfaces' '::optional arg:_files' ':next arg:(a b c)'
+
+# _arguments \
+#   '--version[show program version number and exit]' \
+#   '--help[show help message and exit]' \
+#   '--git-ignore-new[build with uncommitted changes in the source tree]' \
+#   '--git-no-ignore-new[negates --git-ignore-new]' \
+#   '--git-verbose[verbose command execution]' \
+#   '--git-tag[create a tag after a successful build]' \
+#   '--git-tag-only[do not build, only tag and run the posttag hook]' \
+#   '--git-retag[do not fail if the tag already exists]' \
+#   '--git-sign-tags[sign tags]' \
+#   '--git-no-sign-tags[negates --git-sign-tags]' \
+#   '--git-keyid=-[GPG keyid to sign tags with]:GPG key:' \
+#   '--git-debian-tag=-[format string for debian tags]:default is debian/%(version)s:' \
+#   '--git-upstream-tag=-[format string for upstream tags]:default is upstream/%(version)s:' \
+#   '--git-pristine-tar[use pristine-tar to create .orig.tar.gz]' \
+#   '--git-no-pristine-tar[negates --git-pristine-tar]' \
+#   '--git-force-create[force creation of orig.tar.gz]' \
+#   '--git-no-create-orig[do not create orig.tar.gz]' \
+#   '--git-tarball-dir=-[location to look for external tarballs]:tarball directory:_files -/' \
+#   '--git-compression=-[compression type]:compression:(auto gzip bzip2 lzma xz)' \
+#   '--git-compression-level=-[set compression level]:level:(1 2 3 4 5 6 7 8 9)' \
+#   '--git-upstream-branch=-[upstream branch]::' \
+#   '--git-debian-branch=-[branch the Debian package is being developed on]::' \
+#   '--git-ignore-branch[build although debian-branch != current branch]' \
+#   '--git-no-ignore-branch[negates --git-ignore-branch]' \
+#   '--git-builder=-[command to build the Debian package]:command:' \
+#   '--git-cleaner=-[command to clean the working copy]:command:' \
+#   '--git-prebuild=-[command to run before a build]:command:' \
+#   '--git-postbuild=-[hook run after a successful build]:command:' \
+#   '--git-posttag=-[hook run after a successful tag operation]:command:' \
+#   '--git-pbuilder[invoke git-pbuilder for building]' \
+#   '--git-no-pbuilder[negates --git-pbuilder]' \
+#   '--git-dist=-[build for this distribution when using git-pbuilder]:distribution:' \
+#   '--git-arch=-[build for this architecture when using git-pbuilder]:architecture:' \
+#   '--git-export-dir=-[before building the package export the source into this directory]:directory:_files -/' \
+#   '--git-export=-[export treeish object instead of HEAD]:treeish:' \
+#   '--git-dont-purge[retain exported package build directory]' \
+#   '--git-overlay[extract orig tarball when using export-dir option]' \
+#   '--git-no-overlay[negates --git-overlay]' \
+#   '*:other options:_dpkg-buildpackage'
