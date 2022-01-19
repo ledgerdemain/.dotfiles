@@ -1,5 +1,6 @@
 #!/bin/bash
 
 if test "$(which pyenv)"; then
-  eval "$(pyenv init --path)"
+  # Configure the shell environment for pyenv
+  eval "$(pyenv init - --no-rehash zsh)"
 fi
