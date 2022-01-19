@@ -2,8 +2,9 @@
 #
 # bootstrap installs things.
 
-cd "$(dirname "$0")/.."
-DOTFILES_ROOT=$(pwd -P)
+parentDirectory="$(cd "$( dirname "${BASH_SOURCE[0]:-$0}" )" && pwd -P)"
+dotfilesDirectory="$(cd "$( dirname "$parentDirectory" )" && pwd -P)"
+DOTFILES_ROOT=$dotfilesDirectory
 
 set -e
 
