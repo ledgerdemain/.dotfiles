@@ -1,7 +1,14 @@
 #!/bin/bash
 
+# determine dotfiles root by following the symlinked file (syntax dependent on shell)
+if [[ $(basename "${BASH_SOURCE[0]:-$0}") =  "zsh" ]]; then
+    parentDirectory="$(cd "$( dirname "$( readlink -f "${(%):-%N}" )" )" && pwd -P)"
+  else
+    parentDirectory="$(cd "$( dirname "$( readlink -f "${BASH_SOURCE[0]:-$0}" )" )" && pwd -P)"
+fi
+dotfilesDirectory="$(cd "$( dirname "$parentDirectory" )" && pwd -P)"
 # shortcut to this dotfiles path is $DOTFILES_ROOT
-export DOTFILES_ROOT=$HOME/.dotfiles
+export DOTFILES_ROOT=$dotfilesDirectory
 export PRIVATE_DOTFILES_ROOT=$HOME/.private_dotfiles
 
 # your project folders that we can `c [tab]` to
