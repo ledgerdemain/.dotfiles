@@ -3,9 +3,10 @@
 # pyenv
 # pipx
 # pipenv
+# pdm
 #
 # installs pyenv and some of the most popular python versions
-# installs pipx and pipenv
+# installs pipx and pipenv and pdm
 
 # Check for pyenv
 if test ! "$(which pyenv)"; then
@@ -47,6 +48,17 @@ if test ! "$(which pipenv)"; then
         pipx install pipenv
     else
         echo "pipx is not installed - skipping installation of pipenv"
+    fi
+fi
+
+
+# Check for pdm
+if test ! "$(which pdm)"; then
+    if test "$(which brew)"; then
+        echo "Installing pdm for you"
+        brew install pdm
+    else
+        echo "brew is not installed - skipping installation of pdm"
     fi
 fi
 
