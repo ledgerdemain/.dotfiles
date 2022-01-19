@@ -24,7 +24,12 @@ fi
 
 # all of our zsh files
 typeset -U config_files
-config_files=("$DOTFILES_ROOT"/**/*.zsh "$PRIVATE_DOTFILES_ROOT"/**/*.zsh)
+config_files=("$DOTFILES_ROOT"/**/*.zsh)
+
+# add private dot files only if the directory exists
+if [[ -d "$PRIVATE_DOTFILES_ROOT" ]]; then
+  config_files+=("$PRIVATE_DOTFILES_ROOT"/**/*.zsh)
+fi
 
 # load the path files
 for file in ${(M)config_files:#*/path.zsh}; do
