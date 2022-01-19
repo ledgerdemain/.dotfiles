@@ -6,5 +6,5 @@ fi
 
 # enable pipenv completion
 if test "$(which pipenv)"; then
-    eval "$(pipenv --completion)"
+    eval "$(_PIPENV_COMPLETE=zsh_source pipenv)"
 fi
