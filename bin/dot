@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # dot
 #
@@ -7,7 +7,7 @@
 
 set -e
 
-parentDirectory="$(cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd -P)"
+parentDirectory="$(cd "$( dirname "${BASH_SOURCE[0]:-$0}" )" && pwd -P)"
 dotfilesDirectory="$(cd "$( dirname "$parentDirectory" )" && pwd -P)"
 
 displayUsageAndExit() {
@@ -38,7 +38,7 @@ while test $# -gt 0; do
 	shift
 done
 
-export DOTFILES_ROOT=$HOME/.dotfiles
+export DOTFILES_ROOT=$dotfilesDirectory
 
 # Set macOS defaults
 $DOTFILES_ROOT/macos/set-defaults.sh
