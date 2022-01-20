@@ -1,6 +1,6 @@
 #!/bin/bash
 
 
-if test "$(which goenv)"; then
+if (( $+commands[goenv] )); then
   eval "$(goenv init -)"
 fi
