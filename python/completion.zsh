@@ -1,6 +1,12 @@
 
 # enable pipx completion
 if test "$(which pipx)"; then
+    if ! pip3 list 2&> /dev/null | grep -q argcomplete; then
+        pip3 install argcomplete
+    fi
+
+    autoload -U bashcompinit
+    bashcompinit
     eval "$(register-python-argcomplete pipx)"
 fi
 

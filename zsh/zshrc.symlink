@@ -1,7 +1,14 @@
 #!/bin/bash
 
+# determine dotfiles root by following the symlinked file (syntax dependent on shell)
+if [[ $(basename "${BASH_SOURCE[0]:-$0}") =  "zsh" ]]; then
+    parentDirectory="$(cd "$( dirname "$( readlink -f "${(%):-%N}" )" )" && pwd -P)"
+  else
+    parentDirectory="$(cd "$( dirname "$( readlink -f "${BASH_SOURCE[0]:-$0}" )" )" && pwd -P)"
+fi
+dotfilesDirectory="$(cd "$( dirname "$parentDirectory" )" && pwd -P)"
 # shortcut to this dotfiles path is $DOTFILES_ROOT
-export DOTFILES_ROOT=$HOME/.dotfiles
+export DOTFILES_ROOT=$dotfilesDirectory
 export PRIVATE_DOTFILES_ROOT=$HOME/.private_dotfiles
 
 # your project folders that we can `c [tab]` to
@@ -17,7 +24,12 @@ fi
 
 # all of our zsh files
 typeset -U config_files
-config_files=("$DOTFILES_ROOT"/**/*.zsh "$PRIVATE_DOTFILES_ROOT"/**/*.zsh)
+config_files=("$DOTFILES_ROOT"/**/*.zsh)
+
+# add private dot files only if the directory exists
+if [[ -d "$PRIVATE_DOTFILES_ROOT" ]]; then
+  config_files+=("$PRIVATE_DOTFILES_ROOT"/**/*.zsh)
+fi
 
 # load the path files
 for file in ${(M)config_files:#*/path.zsh}; do
@@ -39,25 +51,6 @@ for file in ${(M)config_files:#*/completion.zsh}; do
 done
 
 unset config_files
-
-
-# all of our custom shell commands
-typeset -U custom_shell_cmds
-custom_shell_cmds=("$DOTFILES_ROOT"/bin/*)
-if [[ -d  "$PRIVATE_DOTFILES_ROOT"/bin ]]; then
-  custom_shell_cmds+=("$PRIVATE_DOTFILES_ROOT"/bin/*)
-fi
-
-# symlink shell script commands from bin dirs to /usr/local/bin
-for file in ${custom_shell_cmds}; do
-  file_name=${file##*/}
-  symlink=/usr/local/bin/"$file_name"
-  if [[ ! -h "$symlink" ]]; then
-    ln -s "$file" "$symlink"
-  fi
-done
-
-unset custom_shell_cmds
 
 
 # Better history

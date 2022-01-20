@@ -7,6 +7,12 @@
 #
 # Run ./set-defaults.sh and you'll be good to go.
 
+# exit the script if not running on a mac
+if test ! "$(uname)" = "Darwin"
+  then
+  exit 0
+fi
+
 # Always open everything in Finder's list view. This is important.
 defaults write com.apple.Finder FXPreferredViewStyle Nlsv
 
