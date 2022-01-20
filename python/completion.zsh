@@ -22,7 +22,7 @@ if (( $+commands[pdm] )); then
   # Otherwise, source it and regenerate in the background
   if [[ ! -f "$ZSH_CACHE_DIR/completions/_pdm" ]]; then
     pdm completion zsh >| "$ZSH_CACHE_DIR/completions/_pdm"
-    autload -U "$ZSH_CACHE_DIR/completions/_pdm"
+    autoload -U "$ZSH_CACHE_DIR/completions/_pdm"
   else
     unfunction _pdm
     autoload -U "$ZSH_CACHE_DIR/completions/_pdm"

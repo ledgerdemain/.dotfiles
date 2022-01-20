@@ -18,7 +18,7 @@ if test "$(command -v nvm)"; then
             fi
         elif [ "$node_version" != "$(nvm version default)" ]; then
             if [ "$(nvm version default)" = "N/A" ]; then
-                nvm install --lts
+                nvm install --lts --default
             fi
             echo "Reverting to nvm default version"
             nvm use default
