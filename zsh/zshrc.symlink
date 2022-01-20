@@ -1,10 +1,18 @@
 #!/bin/bash
 
-# determine dotfiles root by following the symlinked file (syntax dependent on shell)
+# determine dotfiles root by following the symlinked file (syntax dependent on shell and OS)
 if [[ $(basename "${BASH_SOURCE[0]:-$0}") =  "zsh" ]]; then
+  if [[ "$(uname)" = "Darwin" ]]; then
+    parentDirectory="$(cd "$( dirname "$( stat -f%Y "${(%):-%N}" )" )" && pwd -P)"
+  else
     parentDirectory="$(cd "$( dirname "$( readlink -f "${(%):-%N}" )" )" && pwd -P)"
+  fi
+else
+  if [[ "$(uname)" = "Darwin" ]]; then
+    parentDirectory="$(cd "$( dirname "$( stat -f%Y "${BASH_SOURCE[0]:-$0}" )" )" && pwd -P)"
   else
     parentDirectory="$(cd "$( dirname "$( readlink -f "${BASH_SOURCE[0]:-$0}" )" )" && pwd -P)"
+  fi
 fi
 dotfilesDirectory="$(cd "$( dirname "$parentDirectory" )" && pwd -P)"
 # shortcut to this dotfiles path is $DOTFILES_ROOT
