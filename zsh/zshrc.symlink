@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # determine dotfiles root by following the symlinked file (syntax dependent on shell and OS)
-if [[ $(basename "${BASH_SOURCE[0]:-$0}") =  "zsh" ]]; then
+if [[ "${BASH_SOURCE[0]:-$0}" = "-zsh" || $(basename "${BASH_SOURCE[0]:-$0}") =  "zsh" ]]; then
   if [[ "$(uname)" = "Darwin" ]]; then
     parentDirectory="$(cd "$( dirname "$( stat -f%Y "${(%):-%N}" )" )" && pwd -P)"
   else
