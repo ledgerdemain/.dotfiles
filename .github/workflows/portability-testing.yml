@@ -1,0 +1,76 @@
+name: Portability Testing
+
+on: [push, pull_request]
+  branches:    
+    - main
+    - master
+
+
+jobs:
+  test_native:
+    name: Test Installation in a Native OS Development Environment
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-18.04, ubuntu-20.04, macos-10.15, macos-11]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Print Context
+        run: |
+          echo "$GITHUB_CONTEXT"
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+
+      - name: Run Dotfiles Installer Script
+        run: ./.dotfiles/script/bootstrap
+
+      - name: Test Utilities
+        run: |
+          if test ! "$(which kubectl)"; then
+            echo "--Failure--"
+            echo "kubectl not installed"
+            return 1
+          else
+            echo "--Success--"
+            echo "kubectl is installed"
+          fi
+
+
+  test_containerized:
+    name: Test Installation in a Containerized Development Environment
+    container: ${{ matrix.container }}
+    strategy:
+      matrix:
+        container: [
+          mcr.microsoft.com/vscode/devcontainers/universal:1-linux,
+          mcr.microsoft.com/vscode/devcontainers/base:0-alpine-3.13,
+          mcr.microsoft.com/vscode/devcontainers/base:focal,
+          mcr.microsoft.com/vscode/devcontainers/base:bullseye
+        ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+          path: /workspaces/.codespaces/.persistedshare/dotfiles
+
+      - name: Print Context
+        run: |
+          echo "$GITHUB_CONTEXT"
+        env:
+          GITHUB_CONTEXT: ${{ toJSON(github) }}
+
+      - name: Run Dotfiles Installer Script
+        run: ./bootstrap
+        working-directory: /workspaces/.codespaces/.persistedshare/dotfiles
+
+      - name: Test Utilities
+        run: |
+          if test ! "$(which kubectl)"; then
+            echo "--Failure--"
+            echo "kubectl not installed"
+            return 1
+          else
+            echo "--Success--"
+            echo "kubectl is installed"
+          fi
