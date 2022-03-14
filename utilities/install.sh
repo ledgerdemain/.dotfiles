@@ -1,9 +1,16 @@
 #!/bin/bash
 #
 # if not previously installed this script will install
+# - asdf - Manage multiple runtime versions with a single CLI tool http://asdf-vm.com/
 # - act (utility for testing github actions workflows locally https://github.com/nektos/act)
 # - direnv
 # - google cloud sdk (gcloud gsutil bq)
+
+
+if ! $(brew list | grep -q "asdf"); then
+    echo "Installing asdf"
+    brew install asdf
+fi
 
 
 if ! $(brew list | grep -q "act"); then
