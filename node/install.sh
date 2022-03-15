@@ -5,10 +5,10 @@
 # This installs the asdf nodejs plugin and its required dependencies
 
 if test "$(command -v asdf)"; then
-  if test ! "$(asdf list-plugins | grep -q nodejs)"; then
+  if test ! "$(asdf plugin-list | grep -q nodejs)"; then
     echo "Installing the asdf nodejs plugin"
     echo "First installing it's required dependencies"
-    if test $(which brew); then
+    if test "$(which brew)"; then
       brew install gpg gawk
     else
       echo "brew not installed - couldn't install 'gpg' and 'gawk' deps"

@@ -5,7 +5,7 @@
 # This installs the asdf golang plugin and its required dependencies
 
 if test "$(command -v asdf)"; then
-  if test ! "$(asdf list-plugins | grep -q golang)"; then
+  if test ! "$(asdf plugin-list | grep -q golang)"; then
     echo "Installing the asdf golang plugin"
     echo "First installing it's required dependencies"
     if test "$(which brew)"; then
