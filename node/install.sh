@@ -1,17 +1,20 @@
 #!/bin/bash
 #
-# nvm: Node Version Manager
+# asdf nodejs plugin
 #
-# This installs nvm
+# This installs the asdf nodejs plugin and its required dependencies
 
-
-default_nvm_dir="$HOME/.nvm"
-nvm_dir="${NVM_DIR:-$default_nvm_dir}"
-
-# Check for nvm
-if test ! "$(which nvm)" && ! [[ -e "$nvm_dir" ]]; then
-  echo "Installing nvm..."
-  git clone https://github.com/nvm-sh/nvm.git "$nvm_dir"
-  cd "$nvm_dir"
-  git checkout $(git describe --abbrev=0 --tags --match "v[0-9]*" $(git rev-list --tags --max-count=1)) && \. "$nvm_dir/nvm.sh"
+if test "$(command -v asdf)"; then
+  if test ! "$(asdf plugin-list | grep -q nodejs)"; then
+    echo "Installing the asdf nodejs plugin"
+    echo "First installing it's required dependencies"
+    if test "$(which brew)"; then
+      brew install gpg gawk
+    else
+      echo "brew not installed - couldn't install 'gpg' and 'gawk' deps"
+    fi
+    asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git
+  fi
+else
+  echo "asdf not installed - couldn't install asdf nodejs plugin"
 fi
