@@ -34,3 +34,14 @@ if test ! "$(which gcloud)" && ! [[ -e "$default_google_cloud_sdk_root" ]]; then
   bash install_google_cloud_sdk.sh --disable-prompts
   rm install_google_cloud_sdk.sh
 fi
+
+
+# Check for pack
+if test ! "$(which pack)"; then
+    if test "$(which brew)"; then
+        echo "Installing pack"
+        brew install buildpacks/tap/pack
+    else
+        echo "brew is not installed - skipping installation of pack"
+    fi
+fi
