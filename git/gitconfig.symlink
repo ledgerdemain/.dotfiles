@@ -26,3 +26,6 @@
         default = simple
 [credential]
 	helper = osxkeychain
+[user]
+	name = avidan-H
+	email = 
